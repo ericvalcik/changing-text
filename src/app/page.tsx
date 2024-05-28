@@ -3,71 +3,13 @@
 import React, { useEffect, useState } from "react";
 import { getRandomChar } from "@/utils";
 
-const text1 = [
-  "a",
-  "d",
-  "o",
-  "r",
-  "a",
-  "b",
-  "l",
-  "e",
-  " ",
-  "w",
-  "o",
-  "r",
-  "l",
-  "d",
-  "w",
-  "i",
-  "d",
-  "e",
-];
+const text1 = "adorable worldwide";
 
-const text2 = [
-  "n",
-  "e",
-  "w",
-  " ",
-  "c",
-  "a",
-  "p",
-  "s",
-  "u",
-  "l",
-  "e",
-  "s",
-  " ",
-  "c",
-  "o",
-  "m",
-  "i",
-  "n",
-  "g",
-];
+const text2 = "new capsules coming soon";
 
 export default function Home() {
   const [textArr, setTextArr] = useState(
-    [
-      "a",
-      "d",
-      "o",
-      "r",
-      "a",
-      "b",
-      "l",
-      "e",
-      " ",
-      "w",
-      "o",
-      "r",
-      "l",
-      "d",
-      "w",
-      "i",
-      "d",
-      "e",
-    ].map((char) =>
+    Array.from(text1).map((char) =>
       Math.random() > 0.5 ? char.toUpperCase() : char.toLowerCase(),
     ),
   );
@@ -88,7 +30,7 @@ export default function Home() {
       );
 
       // animation
-      if (animation.frame > 0) {
+      if (animation.phase !== "end2" && animation.frame > 0) {
         setAnimation((prev) => ({ ...prev, frame: prev.frame - 1 }));
         setTextArr(newArr);
         return;
@@ -119,13 +61,11 @@ export default function Home() {
           }
           break;
         case "end2":
-          if (textArr.length < text1.length) {
-            newArr = [...newArr, text1[newArr.length]];
-            setAnimation({ phase: "end2", frame: 5 });
-          } else {
-            setAnimation({ phase: "start", frame: 250 });
+          if (animation.frame > 1000) {
+            clearInterval(animationInterval);
           }
-          break;
+          setAnimation((prev) => ({ ...prev, frame: prev.frame + 1 }));
+          return;
       }
       setTextArr(newArr);
     }, 10);
@@ -140,20 +80,22 @@ export default function Home() {
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex"></div>
 
       <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <div className="w-[800px]">
-          <h1 className="flex flex-row text-3xl font-bold">
-            {Array.from(Array(15).keys()).map((index) => {
+        <div className="w-[1000px]">
+          <h1 className="flex flex-row text-6xl font-bold">
+            {Array.from(Array(13).keys()).map((index) => {
               const char =
-                index < textArr.length ? textArr[index] : getRandomChar();
+                index < textArr.length
+                  ? textArr[index]
+                  : getRandomChar(animation.frame / 1000);
               return <CharBox key={index}>{char}</CharBox>;
             })}
           </h1>
-          <h1 className="flex flex-row text-3xl font-bold">
-            {Array.from(Array(15).keys()).map((index) => {
+          <h1 className="flex flex-row text-4xl font-bold">
+            {Array.from(Array(11).keys()).map((index) => {
               const char =
-                index + 15 < textArr.length
-                  ? textArr[index + 15]
-                  : getRandomChar();
+                index + 13 < textArr.length
+                  ? textArr[index + 13]
+                  : getRandomChar(animation.frame / 1000);
               return <CharBox key={index}>{char}</CharBox>;
             })}
           </h1>
@@ -166,5 +108,5 @@ export default function Home() {
 }
 
 const CharBox: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="w-8">{children}</div>
+  <div className="w-12">{children}</div>
 );
