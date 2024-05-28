@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { getRandomChar } from "@/utils";
 
 const text1 = [
   "a",
@@ -140,10 +141,21 @@ export default function Home() {
 
       <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
         <div className="w-[800px]">
-          <h1 className="flex flex-row text-3xl">
-            {textArr.map((char, index) => (
-              <CharBox key={index}>{char}</CharBox>
-            ))}
+          <h1 className="flex flex-row text-3xl font-bold">
+            {Array.from(Array(15).keys()).map((index) => {
+              const char =
+                index < textArr.length ? textArr[index] : getRandomChar();
+              return <CharBox key={index}>{char}</CharBox>;
+            })}
+          </h1>
+          <h1 className="flex flex-row text-3xl font-bold">
+            {Array.from(Array(15).keys()).map((index) => {
+              const char =
+                index + 15 < textArr.length
+                  ? textArr[index + 15]
+                  : getRandomChar();
+              return <CharBox key={index}>{char}</CharBox>;
+            })}
           </h1>
         </div>
       </div>
